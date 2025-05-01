@@ -250,5 +250,3 @@ If the HTTP request is missing `description`, we should also get this response:
   "details": "Invalid data"
 }
 ```
-
-make sure to run db migrate and upgrade after wave 1!
