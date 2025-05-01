@@ -14,7 +14,7 @@ def create_task():
         new_task = create_model_from_dict(Task, request_body)
 
     except KeyError as error:
-        response = {"message": f"Invalid request: missing {error.args[0]}"}
+        response = {"details": "Invalid data"}
         abort(make_response(response, 400))
 
     return {"task": new_task.to_dict()}, 201
@@ -62,10 +62,32 @@ def get_all_tasks():
     # # We could also write the line above as:
     # # books = db.session.execute(query).scalars()
 
-
-
 # read one task 
+@bp.get("/<task_id>")
+def get_one_task(task_id):
+    task = validate_model(Task, task_id)
+
+    return {"task": task.to_dict()}, 200
 
 # update task
+@bp.put("/<task_id>")
+def update_one_task(task_id):
+    task = validate_model(Task, task_id)
+    request_body = request.get_json()
+
+    task.title = request_body["title"]
+    task.description = request_body["description"]
+
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
 
 # delete task
+@bp.delete("/<task_id>")
+def delete_one_task(task_id):
+    task = validate_model(Task, task_id)
+
+    db.session.delete(task)
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
