@@ -46,7 +46,8 @@ At submission time, no matter where you are, submit the project via Learn.
 This project is designed to fulfill the features described in detail in each wave. The tests are meant to only guide your development.
 
 1. [Setup](ada-project-docs/setup.md)
-1. [Testing](ada-project-docs/testing.md)
+1. [Testing](ada-project-docs/testing.md) 
+code coverage: pytest --cov=app --cov-report html --cov-report term
 1. [Wave 1: CRUD for one model](ada-project-docs/wave_01.md)
 1. [Wave 2: Using query params](ada-project-docs/wave_02.md)
 1. [Wave 3: Creating custom endpoints](ada-project-docs/wave_03.md)
