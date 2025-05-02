@@ -25,31 +25,28 @@ def get_all_tasks():
     # create a basic select query without any filtering
     query = db.select(Task)
 
-    tasks = db.session.scalars(query.order_by(Task.id))
+    sort = request.args.get("sort")
 
-    tasks_response = []
-    for task in tasks:
-        tasks_response.append(task.to_dict())
-    # ^ can turn into list comprehension:
-    # tasks_response = [task.to_dict() for task in tasks]
+    if sort == "asc":
+        query = query.order_by(Task.title.asc())
+    elif sort == "desc":
+        query = query.order_by(Task.title.desc())
+
+    tasks = db.session.scalars(query)
+
+    tasks_response = [task.to_dict() for task in tasks]
 
     return tasks_response
 
-    # # If we have a `title` query parameter, we can add on to the query object
-    # title_param = request.args.get("title")
+
+    #if you want to search by title or description:
     # if title_param:
-    #     # Match the title_param exactly, including capitalization
-    #     # query = query.where(Book.title == title_param)
+    #     query = query.where(Task.title.ilike(f"%{title_param}%"))
 
-    #     # If we want to allow partial matches, we can use the % wildcard with `like()`
-    #     # If `title_param` contains "Great", the code below will match 
-    #     # both "The Great Gatsby" and "Great Expectations"
-    #     # query = query.where(Book.title.like(f"%{title_param}%"))
-
-    #     # If we want to allow searching case-insensitively, 
-    #     # we can use ilike instead of like
-    #     query = query.where(Book.title.ilike(f"%{title_param}%"))
-
+    # tasks = db.session.scalars(query.order_by(Task.title))
+    # # # We could also write the line above as:
+    # # # books = db.session.execute(query).scalars()
+    
     # # If we have other query parameters, we can continue adding to the query. 
     # # As we did above, we must reassign the `query`` variable to capture the new clause we are adding. 
     # # If we don't reassign `query``, we are calling the `where` function but are not saving the resulting filter
@@ -58,9 +55,9 @@ def get_all_tasks():
     #     # In case there are books with similar titles, we can also filter by description
     #     query = query.where(Book.description.ilike(f"%{description_param}%"))
 
-    # books = db.session.scalars(query.order_by(Book.id))
-    # # We could also write the line above as:
-    # # books = db.session.execute(query).scalars()
+    # tasks = db.session.scalars(query.order_by(Task.id))
+
+    
 
 # read one task 
 @bp.get("/<task_id>")
