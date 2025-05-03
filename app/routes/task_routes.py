@@ -1,8 +1,12 @@
 from flask import Blueprint, abort, make_response, request, Response
+from dotenv import load_dotenv
 from app.models.task import Task
 from .route_utilities import validate_model, create_model_from_dict
 from datetime import datetime, timezone
+import os
+import requests
 from ..db import db
+load_dotenv()
 
 bp = Blueprint("tasks_bp", __name__, url_prefix="/tasks")
 
@@ -91,12 +95,36 @@ def delete_one_task(task_id):
     return Response(status=204, mimetype="application/json")
 
 @bp.patch("/<task_id>/mark_complete")
-def mark_test_complete(task_id):
+def mark_task_complete(task_id):
     task = validate_model(Task, task_id)
 
     task.completed_at = datetime.now(timezone.utc)
 
     db.session.commit()
+
+    # send slack message
+    slack_token = os.environ.get("SLACK_BOT_TOKEN")
+    slack_channel = os.environ.get("SLACK_CHANNEL")
+
+    if slack_token and slack_channel:
+        slack_message = {
+            "channel": slack_channel,
+            "text": f"Someone just completed the task {task.title}"
+        }
+
+        headers = {
+            "Authorization": f"Bearer {slack_token}",
+            "Content-Type": "application/json"
+        }
+
+        # sends request to slack
+        slack_response = requests.post("https://slack.com/api/chat.postMessage", json=slack_message, headers=headers)
+
+        # #optional error handling
+        # if not slack_response.ok:
+        #     print("Slack API error": slack_response.status_code, slack_response.text)
+
+        # can refactor here into a helper function for the slack message
 
     return Response(status=204, mimetype="application/json")
 
@@ -109,3 +137,4 @@ def mark_task_incomplete(task_id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
+
