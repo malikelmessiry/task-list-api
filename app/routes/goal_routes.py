@@ -77,3 +77,10 @@ def add_tasks_to_goal(goal_id):
     db.session.commit()
 
     return {"id": goal.id, "task_ids": task_ids}, 200
+
+# getting tasks of one goal
+@bp.get("/<goal_id>/tasks")
+def get_tasks_of_goal(goal_id):
+    goal = validate_model(Goal, goal_id)
+
+    return goal.to_dict(), 200
