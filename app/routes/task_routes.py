@@ -10,7 +10,7 @@ load_dotenv()
 
 bp = Blueprint("tasks_bp", __name__, url_prefix="/tasks")
 
-# create a new task
+# create a new task ... refactor
 @bp.post("")
 def create_task():
     request_body = request.get_json()

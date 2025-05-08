@@ -23,3 +23,5 @@ def create_model_from_dict(cls, data):
     db.session.add(model)
     db.session.commit()
     return model 
+
+# what about get model by filter? 
