@@ -38,3 +38,16 @@ def get_one_goal(goal_id):
     goal = validate_model(Goal, goal_id)
 
     return {"goal": goal.to_dict()}, 200
+
+# update one goal
+@bp.put("/<goal_id>")
+def update_goal(goal_id):
+    goal = validate_model(Goal, goal_id)
+
+    request_body = request.get_json()
+
+    goal.title = request_body["title"]
+
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
