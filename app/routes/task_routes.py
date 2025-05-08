@@ -69,7 +69,7 @@ def get_all_tasks():
 def get_one_task(task_id):
     task = validate_model(Task, task_id)
 
-    return {"task": task.to_dict()}, 200
+    return {"task": task.to_dict(include_goal_id=True)}, 200
 
 # update task
 @bp.put("/<task_id>")

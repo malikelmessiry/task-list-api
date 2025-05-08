@@ -9,7 +9,7 @@ class Goal(db.Model):
     title: Mapped[str] #= mapped_column(nullable=False)
     tasks: Mapped[list["Task"]] = relationship("Task", back_populates="goal")
     
-    def to_dict(self):
+    def to_dict(self, include_tasks=False):
         goal_dict = {
             "id": self.id,
             "title": self.title,
@@ -17,8 +17,8 @@ class Goal(db.Model):
         }
 
         # if self.tasks:
-        if hasattr(self, "tasks") and self.tasks:
-            goal_dict["tasks"] = [task.to_dict() for task in self.tasks]
+        if include_tasks:
+            goal_dict["tasks"] = [task.to_dict(include_goal_id=True) for task in self.tasks]
     
         return goal_dict
     

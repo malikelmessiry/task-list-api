@@ -86,4 +86,4 @@ def add_tasks_to_goal(goal_id):
 def get_tasks_of_goal(goal_id):
     goal = validate_model(Goal, goal_id)
 
-    return goal.to_dict(), 200
+    return goal.to_dict(include_tasks=True), 200
