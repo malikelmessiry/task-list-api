@@ -13,10 +13,11 @@ class Goal(db.Model):
         goal_dict = {
             "id": self.id,
             "title": self.title,
-            "tasks": self.tasks
+            # "tasks": self.tasks
         }
 
-        if self.tasks:
+        # if self.tasks:
+        if hasattr(self, "tasks") and self.tasks:
             goal_dict["tasks"] = [task.to_dict() for task in self.tasks]
     
         return goal_dict

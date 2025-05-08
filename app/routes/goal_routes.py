@@ -70,6 +70,9 @@ def add_tasks_to_goal(goal_id):
 
     task_ids = request_body.get("task_ids", []) 
 
+    for task in goal.tasks:
+        task.goal_id = None
+
     for task_id in task_ids: # add helper function here
         task = validate_model(Task, task_id)
         task.goal_id = goal.id
