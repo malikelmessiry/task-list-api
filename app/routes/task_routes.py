@@ -43,7 +43,6 @@ def get_all_tasks():
 
     return tasks_response
 
-
     #if you want to search by title or description:
     # if title_param:
     #     query = query.where(Task.title.ilike(f"%{title_param}%"))
@@ -119,12 +118,6 @@ def mark_task_complete(task_id):
 
         # sends request to slack
         slack_response = requests.post("https://slack.com/api/chat.postMessage", json=slack_message, headers=headers)
-
-        # #optional error handling
-        # if not slack_response.ok:
-        #     print("Slack API error": slack_response.status_code, slack_response.text)
-
-        # can refactor here into a helper function for the slack message
 
     return Response(status=204, mimetype="application/json")
 

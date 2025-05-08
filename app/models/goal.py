@@ -6,17 +6,15 @@ from ..db import db
 
 class Goal(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    title: Mapped[str] #= mapped_column(nullable=False)
+    title: Mapped[str]
     tasks: Mapped[list["Task"]] = relationship("Task", back_populates="goal")
     
     def to_dict(self, include_tasks=False):
         goal_dict = {
             "id": self.id,
             "title": self.title,
-            # "tasks": self.tasks
         }
 
-        # if self.tasks:
         if include_tasks:
             goal_dict["tasks"] = [task.to_dict(include_goal_id=True) for task in self.tasks]
     

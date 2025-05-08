@@ -62,7 +62,7 @@ def delete_goal(goal_id):
 
     return Response(status=204, mimetype="application/json")
 
-# send a list of tasks to a goal
+# add list of tasks to a goal
 @bp.post("/<goal_id>/tasks")
 def add_tasks_to_goal(goal_id):
     goal = validate_model(Goal, goal_id)
@@ -73,7 +73,7 @@ def add_tasks_to_goal(goal_id):
     for task in goal.tasks:
         task.goal_id = None
 
-    for task_id in task_ids: # add helper function here
+    for task_id in task_ids: 
         task = validate_model(Task, task_id)
         task.goal_id = goal.id
 

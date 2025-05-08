@@ -17,11 +17,9 @@ def validate_model(cls, model_id):
 
     return model
 
-# review this function and use for post route
 def create_model_from_dict(cls, data):
     model = cls.from_dict(data)
     db.session.add(model)
     db.session.commit()
     return model 
 
-# what about get model by filter? 
