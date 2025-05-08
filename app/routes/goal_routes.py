@@ -31,3 +31,10 @@ def get_all_goals():
     goals = db.session.scalars(query)
 
     return [goal.to_dict() for goal in goals]
+
+# get one goal
+@bp.get("/<goal_id>")
+def get_one_goal(goal_id):
+    goal = validate_model(Goal, goal_id)
+
+    return {"goal": goal.to_dict()}, 200
