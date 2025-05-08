@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, make_response, request, Response
 from dotenv import load_dotenv
 from app.models.goal import Goal
+from app.models.task import Task
 from .route_utilities import validate_model, create_model_from_dict
 import os
 import requests
@@ -60,3 +61,19 @@ def delete_goal(goal_id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
+
+# send a list of tasks to a goal
+@bp.post("/<goal_id>/tasks")
+def add_tasks_to_goal(goal_id):
+    goal = validate_model(Goal, goal_id)
+    request_body = request.get_json()
+
+    task_ids = request_body.get("task_ids", []) 
+
+    for task_id in task_ids: # add helper function here
+        task = validate_model(Task, task_id)
+        task.goal_id = goal.id
+
+    db.session.commit()
+
+    return {"id": goal.id, "task_ids": task_ids}, 200

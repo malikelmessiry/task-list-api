@@ -15,17 +15,23 @@ class Task(db.Model):
     goal: Mapped[Optional["Goal"]] = relationship(back_populates="tasks")
 
     def to_dict(self):
-        return {
+        task_dict = {
             "id": self.id,
             "title": self.title,
             "description": self.description,
             "is_complete": self.completed_at is not None
         }
+
+        if self.goal:
+            task_dict["goal"] = self.goal.title
+
+        return task_dict
     
     @classmethod
     def from_dict(cls, task_data):
         new_task = cls(title=task_data["title"],
                     description=task_data["description"],
-                    completed_at=task_data.get("completed_at"))
-        
+                    completed_at=task_data.get("completed_at"),
+                    goal_id=task_data.get("goal_id"))
+
         return new_task
