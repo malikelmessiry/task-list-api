@@ -3,6 +3,8 @@ from .db import db, migrate
 from .models import task, goal
 from .routes.task_routes import bp as tasks_bp
 from .routes.goal_routes import bp as goals_bp
+from dotenv import load_dotenv
+load_dotenv()
 import os
 
 def create_app(config=None):
